@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Uploading Portal</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 10px;
+            margin: 10px;
+            box-sizing: border-box;
+            background-color: #9a97a8;
+        }
+
+        .container {
+            padding: 5px 0px;
+            width: 100%;
+            height: fit-content;
+        }
+
+        .container .inner-container {
+            background-color: #dadff5;
+            padding: 20px 10px;
+            border: 1px solid #000;
+            border-radius: 25px;
+        }
+
+        .container .inner-container .header {
+            text-align: center;
+        }
+
+        .container .inner-container .section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container .inner-container .section .entry {
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .container .inner-container .section .entry .input {
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container .inner-container .section .entry .label {
+            padding: 2px 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .container .inner-container .section .entry .error {
+            padding: 15px 50px;
+            color: red;
+            font-size: 30px;
+            font-weight: bold;
+            border: red 2px solid;
+            border-radius: 25px;
+            text-align: center;
+        }
+
+        .container .inner-container .section .entry .save-button button {
+            width: 225px;
+            height: 55px;
+            background-color: #F1F1F1;
+            border-radius: 25px;
+            color: #000;
+            font-size: 20px;
+            padding: 2px 10px;
+            cursor: pointer;
+        }
+
+        .container .inner-container .table-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container .inner-container .table-container table td,
+        th {
+            width: 250px;
+            padding: 15px;
+            margin: 10px;
+            border: 2px solid #000;
+            text-align: center;
+        }
+
+        .upload_btn {
+            padding: 5px 0;
+            position: relative;
+            height: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="inner-container">
+            <div class="header">
+                <h2>Image Uploading Portal</h2>
+            </div>
+
+
+            <div class="section">
+                <div class="entry">
+                    <div class="input">
+                        <img id="imgtag" width="60%">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" >
+        <div class="inner-container">
+            <div class="table-container">
+                <div class="section" id="links_container">
+                    <div class="entry">
+                        <div class="label">File Name: </div>
+                        <div id="filename" class="input">
+                        </div>
+                    </div>
+                    <div class="entry">
+                        <div class="label">File Extension: </div>
+                        <div id="ext" class="input">
+                        </div>
+                    </div>
+                    <div class="entry">
+                        <div class="label">File Size: </div>
+                        <div id="size" class="input">
+                        </div>
+                    </div>
+                    <div class="entry">
+                        <div class="label">Uploaded on: </div>
+                        <div id="timestamp" class="input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        window.onload = async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            // console.log(id);
+            const res = await fetch(`/api/image/image/${id}`);
+            const data = await res.json();
+            // console.log(data.img);
+            let imgtag = document.getElementById("imgtag");
+            imgtag.setAttribute("src", data.img.path);
+            let filename = document.getElementById("filename");
+            filename.innerHTML = data.img.name;
+            let ext = document.getElementById("ext");
+            ext.innerHTML = data.img.extension;
+            let size = document.getElementById("size");
+            let sz = (data.img.size/1024).toFixed(2);
+            size.innerHTML = sz + " KB";
+            let timestamp = document.getElementById("timestamp");
+            timestamp.innerHTML = new Date(data.img.createdAt);
+        }
+
+    </script>
+</body>
+
+</html>
