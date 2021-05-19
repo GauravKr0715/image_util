@@ -1,5 +1,4 @@
 const express = require("express");
-const nodemon = require("nodemon");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -37,6 +36,8 @@ app.get("/", (req, res) => {
 //     });
 // }
 
-app.listen(process.env.PORT || 5000, () => {
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
     console.log(`Server running on Port ${PORT}`);
 });
